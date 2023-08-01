@@ -14,7 +14,11 @@ import {
 import { Button } from './ui/button';
 import { IProduct } from '@/types/globalTypes';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
-import { addToCart, minusFromCart } from '@/redux/features/cart/cartSlice';
+import {
+  addToCart,
+  minusFromCart,
+  removeFromCart,
+} from '@/redux/features/cart/cartSlice';
 
 export default function Cart() {
   const { products } = useAppSelector((state) => state.cart);
@@ -27,6 +31,10 @@ export default function Cart() {
 
   const handleMinus = (product: IProduct) => {
     dispatch(minusFromCart(product));
+  };
+
+  const handleRemove = (product: IProduct) => {
+    dispatch(removeFromCart(product));
   };
 
   let total = 0;
@@ -71,6 +79,7 @@ export default function Cart() {
                   <HiMinus size="20" />
                 </Button>
                 <Button
+                  onClick={() => handleRemove(product)}
                   variant="destructive"
                   className="bg-red-500 hover:bg-red-400"
                 >

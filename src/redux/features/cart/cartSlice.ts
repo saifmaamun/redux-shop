@@ -23,14 +23,20 @@ const cartSlice = createSlice({
     },
     minusFromCart: (state, action: PayloadAction<IProduct>) => {
       const existing = state.products.find((p) => p._id == action.payload._id);
-      if (existing) {
-        existing.quantity!--;
+      if (existing!.quantity! > 1) {
+        existing!.quantity!--;
       } else {
-        console.log(existing);
+        const filteredData = state.products.filter(
+          (p) => p._id != action.payload._id
+        );
+        state.products = filteredData;
       }
     },
     removeFromCart: (state, action: PayloadAction<IProduct>) => {
-      console.log(action.payload);
+      const filteredData = state.products.filter(
+        (p) => p._id != action.payload._id
+      );
+      state.products = filteredData;
     },
   },
 });
