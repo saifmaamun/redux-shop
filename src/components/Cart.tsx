@@ -13,15 +13,26 @@ import {
 } from 'react-icons/hi';
 import { Button } from './ui/button';
 import { IProduct } from '@/types/globalTypes';
-import { useAppSelector } from '@/redux/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
+import { addToCart, minusFromCart } from '@/redux/features/cart/cartSlice';
 
 export default function Cart() {
   const { products } = useAppSelector((state) => state.cart);
-  //! Dummy data
+  const dispatch = useAppDispatch();
 
-  const total = 0;
+  const handleAdd = (product: IProduct) => {
+    // console.log(product);
+    dispatch(addToCart(product));
+  };
 
-  //! **
+  const handleMinus = (product: IProduct) => {
+    dispatch(minusFromCart(product));
+  };
+
+  let total = 0;
+  const price = products.map(
+    (product) => (total += product.price * product.quantity!)
+  );
 
   return (
     <Sheet>
@@ -53,10 +64,10 @@ export default function Cart() {
                 </p>
               </div>
               <div className="border-l pl-5 flex flex-col justify-between">
-                <Button>
+                <Button onClick={() => handleAdd(product)}>
                   <HiOutlinePlus size="20" />
                 </Button>
-                <Button>
+                <Button onClick={() => handleMinus(product)}>
                   <HiMinus size="20" />
                 </Button>
                 <Button

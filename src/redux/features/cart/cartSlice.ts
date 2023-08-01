@@ -21,12 +21,20 @@ const cartSlice = createSlice({
         state.products.push({ ...action.payload, quantity: 1 });
       }
     },
+    minusFromCart: (state, action: PayloadAction<IProduct>) => {
+      const existing = state.products.find((p) => p._id == action.payload._id);
+      if (existing) {
+        existing.quantity!--;
+      } else {
+        console.log(existing);
+      }
+    },
     removeFromCart: (state, action: PayloadAction<IProduct>) => {
       console.log(action.payload);
     },
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, minusFromCart, removeFromCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
