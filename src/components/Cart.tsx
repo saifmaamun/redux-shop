@@ -21,7 +21,7 @@ import {
 } from '@/redux/features/cart/cartSlice';
 
 export default function Cart() {
-  const { products } = useAppSelector((state) => state.cart);
+  const { products, total } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
   const handleAdd = (product: IProduct) => {
@@ -37,10 +37,10 @@ export default function Cart() {
     dispatch(removeFromCart(product));
   };
 
-  let total = 0;
-  const price = products.map(
-    (product) => (total += product.price * product.quantity!)
-  );
+  // let total = 0;
+  // const price = products.map(
+  //   (product) => (total += product.price * product.quantity!)
+  // );
 
   return (
     <Sheet>
