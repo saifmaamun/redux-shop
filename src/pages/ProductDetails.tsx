@@ -46,7 +46,7 @@ export default function ProductDetails() {
           <Button onClick={() => handleAddProduct(data)}>Add to cart</Button>
         </div>
       </div>
-      <ProductReview />
+      <ProductReview id={id!} />
     </>
   );
 }
