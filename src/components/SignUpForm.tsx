@@ -8,23 +8,30 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
+import { createUser } from '@/redux/features/user/userSlice';
+import { useAppDispatch } from '@/redux/hooks/hooks';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 interface SignupFormInputs {
   email: string;
   password: string;
+  confirm_password: string;
 }
 
 export function SignupForm({ className, ...props }: UserAuthFormProps) {
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<SignupFormInputs>();
 
   const onSubmit = (data: SignupFormInputs) => {
     console.log(data);
+    dispatch(createUser({ email: data.email, password: data.password }));
   };
 
   return (
@@ -55,14 +62,25 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
             />
             {errors.password && <p>{errors.password.message}</p>}
             <Input
-              id="password"
+              id="confirm_password"
               placeholder="confirm password"
-              type="password"
+              type="confirm_password"
               autoCapitalize="none"
               autoCorrect="off"
+              {...register('confirm_password', {
+                required: true,
+                validate: (confirm_password: string) => {
+                  if (watch('password') != confirm_password) {
+                    return 'Your passwords do no match';
+                  }
+                },
+              })}
             />
+            {errors.confirm_password && (
+              <p>{errors.confirm_password.message}</p>
+            )}
           </div>
-          <Button>Create Account</Button>
+          {<Button>Create Account</Button>}
         </div>
       </form>
       <div className="relative">

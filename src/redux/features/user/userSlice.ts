@@ -45,13 +45,15 @@ const userSlice = createSlice({
         state.isError = false;
       })
       .addCase(createUser.fulfilled, (state, action) => {
+        state.user.email = action.payload;
         state.isLoading = false;
         state.error = null;
         state.isError = false;
       })
       .addCase(createUser.rejected, (state, action) => {
+        state.user.email = null;
         state.isLoading = false;
-        state.error = null;
+        state.error = action.error.message!;
         state.isError = true;
       });
   },
