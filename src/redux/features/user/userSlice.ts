@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { auth } from '@/lib/firebase';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 interface IUserState {
   user: {
@@ -7,6 +9,11 @@ interface IUserState {
   isLoading: boolean;
   isError: boolean;
   error: string | null;
+}
+
+interface ICredential {
+  email: string;
+  password: string;
 }
 
 const initialState: IUserState = {
@@ -18,10 +25,36 @@ const initialState: IUserState = {
   error: null,
 };
 
+export const createUser = createAsyncThunk(
+  'user/createUser',
+  async ({ email, password }: ICredential) => {
+    const data = await createUserWithEmailAndPassword(auth, email, password);
+    return data.user.email;
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(createUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.isError = false;
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.isError = false;
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.isError = true;
+      });
+  },
 });
 
 export default userSlice.reducer;
