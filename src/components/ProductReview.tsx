@@ -15,14 +15,17 @@ import { FiSend } from 'react-icons/fi';
 import {
   useGetComentsQuery,
   usePostCommentMutation,
-} from '@/redux/api/apiSlice';
+} from '@/redux/features/product/productApi';
 
 interface IProps {
   id: string;
 }
 
 export default function ProductReview({ id }: IProps) {
-  const { data } = useGetComentsQuery(id);
+  const { data } = useGetComentsQuery(id, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 60000,
+  });
 
   const [postComment, { isError, isLoading, isSuccess, error }] =
     usePostCommentMutation();
