@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { createUser } from '@/redux/features/user/userSlice';
 import { useAppDispatch } from '@/redux/hooks/hooks';
+import { useNavigate } from 'react-router-dom';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -20,6 +21,7 @@ interface SignupFormInputs {
 }
 
 export function SignupForm({ className, ...props }: UserAuthFormProps) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const {
@@ -32,6 +34,7 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
   const onSubmit = (data: SignupFormInputs) => {
     console.log(data);
     dispatch(createUser({ email: data.email, password: data.password }));
+    navigate('/');
   };
 
   return (

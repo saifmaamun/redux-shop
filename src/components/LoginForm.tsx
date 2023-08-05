@@ -8,6 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
+import { useAppDispatch } from '@/redux/hooks/hooks';
+import { loginUser } from '@/redux/features/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -17,14 +20,21 @@ interface LoginFormInputs {
 }
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-
+  const dispatch = useAppDispatch();
   const onSubmit = (data: LoginFormInputs) => {
     console.log(data);
+    const option = {
+      email: data.email,
+      password: data.password,
+    };
+    dispatch(loginUser(option));
+    navigate('/');
   };
 
   return (
